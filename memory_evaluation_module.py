@@ -2,7 +2,7 @@ import psutil
 import torch
 from typing import Dict, Union
 
-def get_available_memory(safety_margin: float = 0.1) -> Dict[str, Union[float, str]]:
+def hw_memory_evaluation(safety_margin: float = 0.1) -> Dict[str, Union[float, str]]:
     """
     获取当前设备的可用存储资源信息（优先检测GPU显存）
     
@@ -58,12 +58,3 @@ def get_available_memory(safety_margin: float = 0.1) -> Dict[str, Union[float, s
     mem_info['available'] = max(0, round(available, 2))
     
     return mem_info
-
-# 使用示例
-if __name__ == "__main__":
-    mem = get_available_memory()
-    print(f"当前设备类型: {mem['type'].upper()}")
-    print(f"总内存: {mem['total']:.2f} GB")
-    print(f"已使用: {mem['used']:.2f} GB")
-    print(f"空闲内存: {mem['free']:.2f} GB")
-    print(f"安全可用内存: {mem['available']:.2f} GB")
