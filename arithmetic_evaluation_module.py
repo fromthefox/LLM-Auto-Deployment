@@ -4,7 +4,6 @@
 """
 # 思路1：执行一次模型推理，其倒数作为算力标识
 import time
-import psutil
 from llama_cpp import Llama
 
 def benchmark_llama(model_path, prompt, max_tokens=128, n_gpu_layers=0):
@@ -12,8 +11,8 @@ def benchmark_llama(model_path, prompt, max_tokens=128, n_gpu_layers=0):
     llm = Llama(
         model_path=model_path,
         n_ctx=2048,
-        n_threads=psutil.cpu_count(logical=False),  # 使用物理核心数
-        n_gpu_layers=0  # 完全禁用GPU
+        n_threads=4,
+        verbose=False
     )
     
     # 预热运行
@@ -31,6 +30,10 @@ def benchmark_llama(model_path, prompt, max_tokens=128, n_gpu_layers=0):
     tokens_generated = len(output['choices'][0]['message']['content'].split())
     return {
         "time_total": elapsed,
-        "tokens_per_sec": tokens_generated / elapsed,
-        "mem_rss": psutil.Process().memory_info().rss // 1024**2  # MB
+        "tokens_per_sec": tokens_generated / elapsed
     }
+
+"""
+root@f00266bf6e59:/app/scripts# python3 aem.py
+{'time_total': 12.673236443000178, 'tokens_per_sec': 4.813292979607604}
+"""
