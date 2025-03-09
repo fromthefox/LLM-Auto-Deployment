@@ -35,5 +35,6 @@ def benchmark_llama(model_path, prompt, max_tokens=128, n_gpu_layers=0):
 
 """
 root@f00266bf6e59:/app/scripts# python3 aem.py
-{'time_total': 12.673236443000178, 'tokens_per_sec': 4.813292979607604}
+{'time_total': 12.673236443000178, 'tokens_per_sec': 4.813292979607604} 
+Use the inverse of token_per_sec as its arithmetic identifier
 """
