@@ -1,3 +1,3 @@
 """
-本初始化模块用于在中心节点未选择阶段，选择局部最优的中心节点
+This initialisation module is used to select the locally optimal central node in the unselected phase of the central node
 """

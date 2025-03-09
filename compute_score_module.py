@@ -1,9 +1,11 @@
 """
-本模块用于根据整个拓扑的算力、带宽、内存等因素来对各个节点进行得分计算
+This module is used to calculate the score of each node based on the arithmetic, bandwidth and memory of the entire topology
 """
+import numpy as np
+from scipy.stats import entropy
 
-def compute_score(arithmetic_list, bandwidth_list, memory_list):
-    w1, w2, w3 = 0.4, 0.3, 0.3
+def compute_score(weights, arithmetic_list, bandwidth_list, memory_list):
+    w1, w2, w3 = weights[0], weights[1], weights[2]
 
     max_arithmetic = max(arithmetic_list)
     max_bandwidth = max(bandwidth_list)
@@ -20,3 +22,39 @@ def compute_score(arithmetic_list, bandwidth_list, memory_list):
     return score_list
 
 
+def dynamic_weights(arithmetic_list, bandwidth_list, memory_list):
+    # min-max normalization
+    def minmax_scale(arr):
+        arr = np.array(arr)
+        return (arr - arr.min()) / (arr.max() - arr.min() + 1e-8)
+    
+    # calculate norm_res
+    norm_arith = minmax_scale(arithmetic_list)
+    norm_bw = minmax_scale(bandwidth_list)
+    norm_mem = minmax_scale(memory_list)
+    
+    # def KL-entropy
+    def kl_divergence(arr):
+        uniform_dist = np.ones_like(arr)/len(arr)
+        observed_dist = arr / arr.sum()
+        return entropy(observed_dist, uniform_dist)
+    
+    # calculate KL-entropy
+    entropy_arith = kl_divergence(norm_arith)
+    entropy_bw = kl_divergence(norm_bw)
+    entropy_mem = kl_divergence(norm_mem)
+    total_entropy = entropy_arith + entropy_bw + entropy_mem
+    
+    # base weights: Ensure hard weighting of memory
+    base_weights = np.array([0.3, 0.3, 0.4])  # [arithmetic, bd, memory]
+    
+    # dynamic adapt
+    dynamic_part = np.array([
+        entropy_arith/(total_entropy+1e-8),
+        entropy_bw/(total_entropy+1e-8),
+        entropy_mem/(total_entropy+1e-8)
+    ])
+    
+    # Composite weighting calculation
+    final_weights = 0.3 * base_weights + 0.7 * dynamic_part
+    return final_weights / final_weights.sum()

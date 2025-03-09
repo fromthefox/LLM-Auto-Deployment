@@ -1,6 +1,6 @@
 """
-该算力模块用于获取每个硬件设备的算力
-使用方法：每个硬件设备在算法开始前运行该Demo得到结果
+This arithmetic module is used to obtain the arithmetic power of each hardware device
+Usage: Each hardware device runs the demo to get the result before the algorithm starts.
 """
 # 思路1：执行一次模型推理，其倒数作为算力标识
 import time

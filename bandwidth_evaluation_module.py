@@ -1,8 +1,8 @@
 """
-bandwidth可以：
-1. 默认Klonet的拓扑搭建获得带宽
-2. 手动使用iperf3方法获得带宽
-3. 以下脚本（未测试）
+bandwidth can:
+1. Default Klonet topology construction to get bandwidth
+2. manually using the iperf3 method to get bandwidth
+3. the following script (not tested)
 """
 
 import paramiko
