@@ -3,6 +3,8 @@ This module is used to calculate the score of each node based on the arithmetic,
 """
 import numpy as np
 from scipy.stats import entropy
+import bandwidth_evaluation_module
+import arithmetic_evaluation_module
 
 def compute_score(weights, arithmetic_list, bandwidth_list, memory_list):
     w1, w2, w3 = weights[0], weights[1], weights[2]
@@ -58,3 +60,35 @@ def dynamic_weights(arithmetic_list, bandwidth_list, memory_list):
     # Composite weighting calculation
     final_weights = 0.3 * base_weights + 0.7 * dynamic_part
     return final_weights / final_weights.sum()
+
+
+def evaluate_bandwidth(candidate, all_nodes):
+    """
+    From here we get two metrics, shortboard bandwidth and bandwidth equalisation
+    """
+    bw_list = [bandwidth_evaluation_module.get_bw(node, candidate) for node in all_nodes if node != candidate]
+    # bw_list is a symmetric matrix (math.)
+    min_bw = min(bw_list)
+    avg_bw = np.mean(bw_list)
+    max_bw = max(bw_list)
+    uniformity = 1 - (max_bw - min_bw)/avg_bw
+    # A high degree of equilibrium indicates that the bandwidth from all nodes to the central node is in the approximation interval
+    return {
+        'min_bw': min_bw,
+        # min_bw stands for short board effect
+        'uniformity': max(uniformity, 0.1)
+    }
+
+def compute_suitability(compute_power):
+    """
+    Computational power fitness (Sigmoid suppression over/under)
+    """
+    k = 0.1
+    threshold = 50
+    return 1 / (1 + np.exp(k * (compute_power - threshold)))
+
+def total_score(candidate, all_nodes):
+    bw = evaluate_bandwidth(candidate, all_nodes)
+    compute = arithmetic_evaluation_module.get_compute_power(candidate)
+    suit = compute_suitability(compute)
+    return np.log(bw['min_bw'] + 1e-8) * bw['uniformity'] * suit

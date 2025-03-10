@@ -62,12 +62,19 @@ def measure_bandwidth(ip_a: str, ip_b: str,
     return parse_iperf(a_to_b), parse_iperf(b_to_a)
 
 # 使用示例（两种方式）：
-if __name__ == "__main__":
-    # 方式1：运行时输入密码
-    bw1, bw2 = measure_bandwidth("192.168.1.101", "192.168.1.102")
+# if __name__ == "__main__":
+#     # 方式1：运行时输入密码
+#     bw1, bw2 = measure_bandwidth("192.168.1.101", "192.168.1.102")
     
-    # 方式2：代码中传递密码（不建议，因有安全风险）
-    # bw1, bw2 = measure_bandwidth("192.168.1.101", "192.168.1.102", password="your_password")
+#     # 方式2：代码中传递密码（不建议，因有安全风险）
+#     # bw1, bw2 = measure_bandwidth("192.168.1.101", "192.168.1.102", password="your_password")
     
-    print(f"A->B带宽: {bw1:.2f} Mbps")
-    print(f"B->A带宽: {bw2:.2f} Mbps")
+#     print(f"A->B带宽: {bw1:.2f} Mbps")
+#     print(f"B->A带宽: {bw2:.2f} Mbps")
+
+
+def get_bw(nodeA:str, nodeB:str) -> float:
+    """
+    return the bandwidth between nodeA and nodeB
+    """
+    pass
