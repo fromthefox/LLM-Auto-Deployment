@@ -24,22 +24,21 @@ def compute_score(weights, arithmetic_list, bandwidth_list, memory_list):
     return score_list
 
 
-def dynamic_weights(arithmetic_list, bandwidth_list, memory_list):
+def dynamic_weights(arithmetic_list, bandwidth_list, memory_list, base_weights = np.array([0.3, 0.3, 0.4]), dynamic_ratio = 0.7):
     # min-max normalization
     def minmax_scale(arr):
         arr = np.array(arr)
         return (arr - arr.min()) / (arr.max() - arr.min() + 1e-8)
     
-    # calculate norm_res
-    norm_arith = minmax_scale(arithmetic_list)
-    norm_bw = minmax_scale(bandwidth_list)
-    norm_mem = minmax_scale(memory_list)
-    
-    # def KL-entropy
     def kl_divergence(arr):
         uniform_dist = np.ones_like(arr)/len(arr)
         observed_dist = arr / arr.sum()
         return entropy(observed_dist, uniform_dist)
+
+    # calculate norm_res
+    norm_arith = minmax_scale(arithmetic_list)
+    norm_bw = minmax_scale(bandwidth_list)
+    norm_mem = minmax_scale(memory_list)
     
     # calculate KL-entropy
     entropy_arith = kl_divergence(norm_arith)
@@ -48,7 +47,7 @@ def dynamic_weights(arithmetic_list, bandwidth_list, memory_list):
     total_entropy = entropy_arith + entropy_bw + entropy_mem
     
     # base weights: Ensure hard weighting of memory
-    base_weights = np.array([0.3, 0.3, 0.4])  # [arithmetic, bd, memory]
+    # [arithmetic, bd, memory]
     
     # dynamic adapt
     dynamic_part = np.array([
@@ -58,7 +57,7 @@ def dynamic_weights(arithmetic_list, bandwidth_list, memory_list):
     ])
     
     # Composite weighting calculation
-    final_weights = 0.3 * base_weights + 0.7 * dynamic_part
+    final_weights = (1-dynamic_ratio) * base_weights + dynamic_ratio * dynamic_part
     return final_weights / final_weights.sum()
 
 
