@@ -17,4 +17,13 @@ if __name__ == "__main__":
     # 3. Initial centre node selection
     central_node_index = select_central_node(topo_info, model_usage_memory)
 
-    # 3. 
+    # 4. Calculation of the distribution of tasks
+
+    # 4.1. get necessary information for each node.
+    
+
+    # 4.2. calculate the score for each node
+
+    # 4.3. Determination of the proportion of mandates to be allocated
+
+    
