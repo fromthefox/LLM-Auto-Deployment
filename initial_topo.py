@@ -6,7 +6,7 @@ By default all information about the entire topology is known, i.e. it is straig
 # Intent parsing can even be added here to do it lol
 from Topo_class_def import Topo
 
-def create_topo():
+def create_topo(nodes_list:list) -> Topo:
     """
     Create the topology of the network
     """
@@ -18,6 +18,17 @@ def create_topo():
         [40, 30, 20, 10, 0]
     ]
     # Mbps
+    """
+    arithmetics_list = []
+    memories_list = []
+    for i in range(nodes_num):
+        arithmetic = get_arithmetic(i)
+        arithmetics_list.append(arithmetic)
+        memory = get_memory(i)
+        memories_list.append(memory)
+    for i in range(nodes_num):
+        nodes_dict[i] = {"arithmetic": arithmetics_list[i], "memory": memories_list[i]}
+    """
     nodes_dict = {
         0: {"arithmetic": 0.5, "memory": 0.5},
         1: {"arithmetic": 0.6, "memory": 0.6},
