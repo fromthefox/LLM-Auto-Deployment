@@ -11,12 +11,23 @@ This initialisation module is used to select the locally optimal central node in
 对于第一种方案，应该不需要权重，只需要归一化即可，因为网络得分和计算得分的量纲不同。
 """
 import numpy as np
+from Topo_class_def import Topo
 
-def select_central_node(nodes_list):
+def compute_network_score(node_network)->float:
     """
-    Select the central node based on the network score
+    Compute the network score for a node
     """
-    # Get the network score
-    network_scores = np.array([get_network_metrics(node)['score'] for node in nodes_list])
-    # Get the index of the node with the highest network score
-    return np.argmax(network_scores)
+    pass
+
+def select_central_node(topo_info: Topo) -> int:
+    """
+    Select the central node based on the network score, and return the best central node as index
+    """
+    network_info = topo_info.network
+    # network_info is a NxN matrix, where N is the number of nodes
+    network_scores_of_nodes = []
+    for node_network in network_info:
+        network_scores_of_nodes.append(compute_network_score(node_network))
+    max_value = max(network_scores_of_nodes)
+    max_index = network_scores_of_nodes.index(max_value)
+    return max_index
