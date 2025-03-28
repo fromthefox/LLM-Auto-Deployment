@@ -13,11 +13,26 @@ This initialisation module is used to select the locally optimal central node in
 import numpy as np
 from Topo_class_def import Topo
 
-def compute_network_score(node_network)->float:
+def compute_network_score(node_index, node_network)->float:
     """
     Compute the network score for a node
     """
-    pass
+    bw_list = [bw for i, bw in enumerate(node_network) if i != node_index and bw > 0]
+    avg_bw = np.mean(bw_list)
+    min_bw = np.min(bw_list)
+    std_bw = np.std(bw_list)
+
+    score_avg = np.log10(avg_bw) if avg_bw > 0 else 0
+    score_min = np.log(min_bw + 1)  # +1防止0值
+    score_stability = 1 - (std_bw / (avg_bw + 1e-8))  # 防止除零
+
+    raw_score = (
+        0.6 * score_avg + 0.2 * score_min + 0.2 * score_stability
+    )
+
+    return raw_score
+
+
 
 def select_central_node(topo_info: Topo) -> int:
     """
@@ -26,8 +41,8 @@ def select_central_node(topo_info: Topo) -> int:
     network_info = topo_info.network
     # network_info is a NxN matrix, where N is the number of nodes
     network_scores_of_nodes = []
-    for node_network in network_info:
-        network_scores_of_nodes.append(compute_network_score(node_network))
+    for node_index, node_network in enumerate(network_info):
+        network_scores_of_nodes.append(compute_network_score(node_index, node_network))
     max_value = max(network_scores_of_nodes)
     max_index = network_scores_of_nodes.index(max_value)
     return max_index
