@@ -53,7 +53,7 @@ def compute_network_score(node_index, node_network, model_memory)->float:
 
 
 
-def select_central_node(topo: Topo) -> int:
+def select_central_node(topo: Topo, model_memory: float) -> int:
     """
     Select the central node based on the network score, and return the best central node as index
     """
@@ -61,7 +61,7 @@ def select_central_node(topo: Topo) -> int:
     # network_info is a NxN matrix, where N is the number of nodes
     network_scores_of_nodes = []
     for node_index, node_network in enumerate(network_info):
-        network_scores_of_nodes.append(compute_network_score(node_index, node_network))
+        network_scores_of_nodes.append(compute_network_score(node_index, node_network, model_memory))
 
     max_value = max(network_scores_of_nodes)
     max_index = network_scores_of_nodes.index(max_value)
