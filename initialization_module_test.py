@@ -27,8 +27,8 @@ def select_central_node(candidate_nodes):
     # 返回得分最高的节点索引
     return np.argmax(combined_scores)
 
-if __name__ == "__main__":
-    # 测试样例
-    test_nodes = [...]  # 需要替换为实际的节点数据
-    selected_index = select_central_node(test_nodes)
-    print(f"Selected central node index: {selected_index}")
+# if __name__ == "__main__":
+#     # 测试样例
+#     test_nodes = [...]  # 需要替换为实际的节点数据
+#     selected_index = select_central_node(test_nodes)
+#     print(f"Selected central node index: {selected_index}")
