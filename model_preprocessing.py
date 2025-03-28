@@ -2,7 +2,7 @@
 this file is used to preprocess the model.
 """
 
-def model_memory_prediction(model_params_num:int, dtype:str) -> float:
+def model_usage_memory_prediction(model_params_num:int, dtype:str) -> float:
     """
     this function is used to predict the usage of the model.
     """
@@ -15,3 +15,12 @@ def model_memory_prediction(model_params_num:int, dtype:str) -> float:
     # Bytes
     return model_params_num * dtype_dict[dtype] / 1024**3
     # GB
+
+def model_selection(model_name:str) -> int:
+    """
+    this function is used to get the model params-num based on the model name.
+    """
+    model_dict = {
+        "llama-3-8B": 8.3e9
+    }
+    return model_dict[model_name]

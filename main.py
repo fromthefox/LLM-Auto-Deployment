@@ -3,6 +3,7 @@ Overall framework
 """
 from central_node_selection import select_central_node
 from initial_topo import create_topo
+from model_preprocessing import model_usage_memory_prediction, model_selection
 
 if __name__ == "__main__":
 
@@ -10,9 +11,10 @@ if __name__ == "__main__":
     topo_info = create_topo()
 
     # 2. Select the model file and determine the relevant information
-    
+    model_params_num = model_selection("llama-3-8B")
+    model_usage_memory = model_usage_memory_prediction(model_params_num, "float32")
 
     # 3. Initial centre node selection
-    central_node_index = select_central_node(topo_info)
+    central_node_index = select_central_node(topo_info, model_usage_memory)
 
     # 3. 
