@@ -10,3 +10,13 @@ This initialisation module is used to select the locally optimal central node in
 
 对于第一种方案，应该不需要权重，只需要归一化即可，因为网络得分和计算得分的量纲不同。
 """
+import numpy as np
+
+def select_central_node(nodes_list):
+    """
+    Select the central node based on the network score
+    """
+    # Get the network score
+    network_scores = np.array([get_network_metrics(node)['score'] for node in nodes_list])
+    # Get the index of the node with the highest network score
+    return np.argmax(network_scores)
