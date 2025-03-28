@@ -45,7 +45,7 @@ Use the inverse of token_per_sec as its arithmetic identifier
 # Idea 2: Design a multidimensional multiplication operation for evaluating the computational power of a hardware device
 # in this way we don't need to download the model and run it.
 def benchmark_tensor(N=4096, dtype=torch.float32, threads=None):
-    """CPU矩阵乘法算力测试"""
+    """CPU Matrix Multiplication Arithmetic Test"""
     
     # Set the number of threads (all physical cores are used by default)
     if threads is None:
