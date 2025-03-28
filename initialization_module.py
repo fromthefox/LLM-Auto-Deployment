@@ -13,24 +13,43 @@ This initialisation module is used to select the locally optimal central node in
 import numpy as np
 from Topo_class_def import Topo
 
-def compute_network_score(node_index, node_network)->float:
+def get_node_memory(node_index):
+    """
+    Get the memory of the node
+    """
+    pass
+
+
+def memory_judgement(node_index:int, model_memory:float)->bool:
+    """
+    Judge whether the node has enough memory to load the model
+    """
+    node_memory = get_node_memory(node_index)
+    return node_memory > model_memory
+
+
+
+def compute_network_score(node_index, node_network, model_memory)->float:
     """
     Compute the network score for a node
     """
-    bw_list = [bw for i, bw in enumerate(node_network) if i != node_index and bw > 0]
-    avg_bw = np.mean(bw_list)
-    min_bw = np.min(bw_list)
-    std_bw = np.std(bw_list)
+    if memory_judgement(node_index, model_memory) == False:
+        return 0
+    else:
+        bw_list = [bw for i, bw in enumerate(node_network) if i != node_index and bw > 0]
+        avg_bw = np.mean(bw_list)
+        min_bw = np.min(bw_list)
+        std_bw = np.std(bw_list)
 
-    score_avg = np.log10(avg_bw) if avg_bw > 0 else 0
-    score_min = np.log(min_bw + 1)  # +1防止0值
-    score_stability = 1 - (std_bw / (avg_bw + 1e-8))  # 防止除零
+        score_avg = np.log10(avg_bw) if avg_bw > 0 else 0
+        score_min = np.log(min_bw + 1)  # +1防止0值
+        score_stability = 1 - (std_bw / (avg_bw + 1e-8))  # 防止除零
 
-    raw_score = (
-        0.6 * score_avg + 0.2 * score_min + 0.2 * score_stability
-    )
+        raw_score = (
+            0.6 * score_avg + 0.2 * score_min + 0.2 * score_stability
+        )
 
-    return raw_score
+        return raw_score
 
 
 
@@ -43,6 +62,8 @@ def select_central_node(topo_info: Topo) -> int:
     network_scores_of_nodes = []
     for node_index, node_network in enumerate(network_info):
         network_scores_of_nodes.append(compute_network_score(node_index, node_network))
+
     max_value = max(network_scores_of_nodes)
     max_index = network_scores_of_nodes.index(max_value)
+    
     return max_index
