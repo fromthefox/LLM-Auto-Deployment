@@ -2,6 +2,21 @@ import psutil
 import torch
 from typing import Dict, Union
 
+def model_memory_prediction(model_params_num:int, dtype:str) -> float:
+    """
+    this function is used to predict the usage of the model.
+    """
+    dtype_dict = {
+        "float32": 4,
+        "float16": 2,
+        "bfloat16": 2,
+        "int8": 1
+    }
+    # Bytes
+    return model_params_num * dtype_dict[dtype] / 1024**3
+    # GB
+
+
 def hw_memory_evaluation(safety_margin: float = 0.1) -> Dict[str, Union[float, str]]:
     """
     获取当前设备的可用存储资源信息（优先检测GPU显存）
