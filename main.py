@@ -21,7 +21,7 @@ if __name__ == "__main__":
     # 4. Calculation of the distribution of tasks
 
     # 4.1. Preparation work
-    nodes_info_dict = dict2list
+    nodes_info_dict = dict2list(topo_info.nodes_dict, topo_info.network_matrix, central_node_index)
 
     # 4.2. calculate the score for each node
 
