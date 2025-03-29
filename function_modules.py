@@ -1,6 +1,8 @@
 """
 some modules to use
 """
+import numpy as np
+from scipy.stats import entropy
 
 def dict2list(nodes_info_dict:dict, network_matrix:list, central_node_index:int) -> dict:
     """
@@ -24,3 +26,16 @@ def dict2list(nodes_info_dict:dict, network_matrix:list, central_node_index:int)
     }
 
     return res_dict
+
+
+# min-max normalization
+def minmax_scale(arr):
+    arr = np.array(arr)
+    return (arr - arr.min()) / (arr.max() - arr.min() + 1e-8)
+
+
+# kl-divergence calculation
+def kl_divergence(arr):
+    uniform_dist = np.ones_like(arr)/len(arr)
+    observed_dist = arr / arr.sum()
+    return entropy(observed_dist, uniform_dist)

@@ -3,21 +3,12 @@ This module is used to calculate the score of each node based on the arithmetic,
 """
 import numpy as np
 from scipy.stats import entropy
-import bandwidth_evaluation_module
-import arithmetic_evaluation_module
+from function_modules import minmax_scale, kl_divergence
 
 
-def dynamic_weights(arithmetic_list, bandwidth_list, memory_list, base_weights = np.array([0.5, 0.4, 0.1]), dynamic_ratio = 0.7):
-    # min-max normalization
-    def minmax_scale(arr):
-        arr = np.array(arr)
-        return (arr - arr.min()) / (arr.max() - arr.min() + 1e-8)
-    
-    # kl-divergence calculation
-    def kl_divergence(arr):
-        uniform_dist = np.ones_like(arr)/len(arr)
-        observed_dist = arr / arr.sum()
-        return entropy(observed_dist, uniform_dist)
+def dynamic_weights(nodes_info_dict, base_weights = np.array([0.5, 0.4, 0.1]), dynamic_ratio = 0.7):
+
+    arithmetic_list, bandwidth_list, memory_list = nodes_info_dict["arithmetic"], nodes_info_dict["bandwidth"], nodes_info_dict["memory"]
 
     # calculate norm_res
     norm_arith = minmax_scale(arithmetic_list)
@@ -45,3 +36,22 @@ def dynamic_weights(arithmetic_list, bandwidth_list, memory_list, base_weights =
     final_weights = (1-dynamic_ratio) * base_weights + dynamic_ratio * dynamic_part
     return final_weights / final_weights.sum()
 
+def compute_suitability(compute_power):
+    """
+    Computational power fitness (Sigmoid suppression over/under)
+    """
+    k = 0.1
+    threshold = 50
+    return 1 / (1 + np.exp(k * (compute_power - threshold)))
+
+def total_score(nodes_info_dict, dynamic_weights):
+    """
+    this func is used to compute the score of each node baseed on weights.
+    """
+    arithmetic_list, bandwidth_list, memory_list = nodes_info_dict["arithmetic"], nodes_info_dict["bandwidth"], nodes_info_dict["memory"]
+    
+    norm_arith = minmax_scale(arithmetic_list)
+    norm_bw = minmax_scale(bandwidth_list)
+    norm_mem = minmax_scale(memory_list)
+
+    
