@@ -41,17 +41,49 @@ def compute_suitability(compute_power):
     Computational power fitness (Sigmoid suppression over/under)
     """
     k = 0.1
-    threshold = 50
+    threshold = np.median(compute_power)
     return 1 / (1 + np.exp(k * (compute_power - threshold)))
 
-def total_score(nodes_info_dict, dynamic_weights):
+def latency_penalty(latency_list):
+    """
+    Exponential penalty for nodes with higher than average latency
+    """
+    avg_latency = np.mean(latency_list)
+    return np.exp(-0.1 * (latency_list - avg_latency))
+
+def memory_filter(memory_list, min_required=16):
+    """
+    filter the nodes based on memory requirement.
+    but not now, this is a placeholder for future use.
+    """
+    pass
+
+
+def total_score(nodes_info_dict, dynamic_weights, task_demand):
     """
     this func is used to compute the score of each node baseed on weights.
     """
     arithmetic_list, bandwidth_list, memory_list = nodes_info_dict["arithmetic"], nodes_info_dict["bandwidth"], nodes_info_dict["memory"]
     
+    # mem_mask = memory_filter(memory, task_demand["memory"])
+    # Memory Hard Filtering
+
+
     norm_arith = minmax_scale(arithmetic_list)
     norm_bw = minmax_scale(bandwidth_list)
     norm_mem = minmax_scale(memory_list)
 
-    
+    weights = np.array(dynamic_weights)
+    weights = weights / (weights.sum() + 1e-8)
+
+    scores = []
+    for i in range(len(arithmetic_list)):
+        # Weighted geometric mean with smoothing
+        geo_mean = (
+            (norm_arith[i] + 1e-8) ** weights[0] * 
+            (norm_bw[i] + 1e-8) ** weights[1] * 
+            (norm_mem[i] + 1e-8) ** weights[2]
+        )
+        # 应用适应性调整
+        final_score = geo_mean * suit_factors * latency_penalties
+        scores.append(final_score)

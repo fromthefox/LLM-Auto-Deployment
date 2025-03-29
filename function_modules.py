@@ -39,3 +39,9 @@ def kl_divergence(arr):
     uniform_dist = np.ones_like(arr)/len(arr)
     observed_dist = arr / arr.sum()
     return entropy(observed_dist, uniform_dist)
+
+# robust normalization
+def robust_normalize(arr):
+    q10 = np.percentile(arr, 10)
+    q90 = np.percentile(arr, 90)
+    return (arr - q10) / (q90 - q10 + 1e-8)
