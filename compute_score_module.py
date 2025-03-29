@@ -7,7 +7,11 @@ from function_modules import minmax_scale, kl_divergence, robust_normalize
 
 
 def dynamic_weights(nodes_info_dict, base_weights = np.array([0.5, 0.4, 0.1]), dynamic_ratio = 0.7):
-
+    """
+    func: compute the dynamic weight accrodding to the list of three dimensions.
+    input: nodes info dict, including arithmetic, bandwidth and memory.
+    output: the dynamic weights of the three dimensions.
+    """
     arithmetic_list, bandwidth_list, memory_list = nodes_info_dict["arithmetic"], nodes_info_dict["bandwidth"], nodes_info_dict["memory"]
 
     # calculate norm_res
@@ -64,9 +68,11 @@ def memory_filter(memory_list, min_required=16):
     pass
 
 
-def total_score(nodes_info_dict, dynamic_weights):
+def total_score(nodes_info_dict:dict, dynamic_weights:np.ndarray)->list:
     """
-    this func is used to compute the score of each node baseed on weights.
+    func: compute the total score of the nodes based on 3 dimensions
+    input: nodes_info_dict, including arithmetic, bandwidth and memory
+    output: the list including the score of each node
     """
     # 1. Get the necessary information
     arithmetic_list, bandwidth_list, memory_list = nodes_info_dict["arithmetic"], nodes_info_dict["bandwidth"], nodes_info_dict["memory"]
