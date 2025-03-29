@@ -24,7 +24,7 @@ if __name__ == "__main__":
     nodes_info_dict = dict2list(topo_info.nodes_dict, topo_info.network_matrix, central_node_index)
 
     # 4.2. calculate the score for each node
-
+    
 
     # 4.3. Determination of the proportion of mandates to be allocated
 

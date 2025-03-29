@@ -7,12 +7,13 @@ import bandwidth_evaluation_module
 import arithmetic_evaluation_module
 
 
-def dynamic_weights(arithmetic_list, bandwidth_list, memory_list, base_weights = np.array([0.3, 0.3, 0.4]), dynamic_ratio = 0.7):
+def dynamic_weights(arithmetic_list, bandwidth_list, memory_list, base_weights = np.array([0.5, 0.4, 0.1]), dynamic_ratio = 0.7):
     # min-max normalization
     def minmax_scale(arr):
         arr = np.array(arr)
         return (arr - arr.min()) / (arr.max() - arr.min() + 1e-8)
     
+    # kl-divergence calculation
     def kl_divergence(arr):
         uniform_dist = np.ones_like(arr)/len(arr)
         observed_dist = arr / arr.sum()
@@ -33,6 +34,7 @@ def dynamic_weights(arithmetic_list, bandwidth_list, memory_list, base_weights =
     # [arithmetic, bd, memory]
     
     # dynamic adapt
+    # normalization
     dynamic_part = np.array([
         entropy_arith/(total_entropy+1e-8),
         entropy_bw/(total_entropy+1e-8),
@@ -43,34 +45,3 @@ def dynamic_weights(arithmetic_list, bandwidth_list, memory_list, base_weights =
     final_weights = (1-dynamic_ratio) * base_weights + dynamic_ratio * dynamic_part
     return final_weights / final_weights.sum()
 
-
-def evaluate_bandwidth(candidate, all_nodes):
-    """
-    From here we get two metrics, shortboard bandwidth and bandwidth equalisation
-    """
-    bw_list = [bandwidth_evaluation_module.get_bw(node, candidate) for node in all_nodes if node != candidate]
-    # bw_list is a symmetric matrix (math.)
-    min_bw = min(bw_list)
-    avg_bw = np.mean(bw_list)
-    max_bw = max(bw_list)
-    uniformity = 1 - (max_bw - min_bw)/avg_bw
-    # A high degree of equilibrium indicates that the bandwidth from all nodes to the central node is in the approximation interval
-    return {
-        'min_bw': min_bw,
-        # min_bw stands for short board effect
-        'uniformity': max(uniformity, 0.1)
-    }
-
-def compute_suitability(compute_power):
-    """
-    Computational power fitness (Sigmoid suppression over/under)
-    """
-    k = 0.1
-    threshold = 50
-    return 1 / (1 + np.exp(k * (compute_power - threshold)))
-
-def total_score(candidate, all_nodes):
-    bw = evaluate_bandwidth(candidate, all_nodes)
-    compute = arithmetic_evaluation_module.get_compute_power(candidate)
-    suit = compute_suitability(compute)
-    return np.log(bw['min_bw'] + 1e-8) * bw['uniformity'] * suit
