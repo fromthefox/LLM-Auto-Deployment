@@ -6,23 +6,6 @@ from scipy.stats import entropy
 import bandwidth_evaluation_module
 import arithmetic_evaluation_module
 
-def compute_score(weights, arithmetic_list, bandwidth_list, memory_list):
-    w1, w2, w3 = weights[0], weights[1], weights[2]
-
-    max_arithmetic = max(arithmetic_list)
-    max_bandwidth = max(bandwidth_list)
-    max_memory = max(memory_list)
-
-    score_list = []
-
-    for i in range(len(arithmetic_list)):
-        normalized_arithmetic = arithmetic_list[i]/max_arithmetic
-        normalized_bandwidth = bandwidth_list[i]/max_bandwidth
-        normalized_memory = memory_list[i]/max_memory
-        score = w1 * normalized_arithmetic + w2 * normalized_bandwidth + w3 * normalized_memory
-        score_list.append(score)
-    return score_list
-
 
 def dynamic_weights(arithmetic_list, bandwidth_list, memory_list, base_weights = np.array([0.3, 0.3, 0.4]), dynamic_ratio = 0.7):
     # min-max normalization

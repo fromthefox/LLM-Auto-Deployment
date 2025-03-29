@@ -2,15 +2,23 @@
 some modules to use
 """
 
-
-def calculating_memory_estimates(dtype: str, A_shape: tuple, B_shape: tuple) -> int:
+def dict2list(nodes_info_dict:dict, network_matrix:list, central_node_index:int) -> dict:
     """
-    estimate the memory consumption of the matmul
+    convert the topo dict info to list info.
+    this is a format converter, convert the initial topo format into the format we need to compute the node score.
     """
-    dsize_dict = {
-        "fp32": 4,
-        "fp16": 2
+    network_list = network_matrix[central_node_index]
+    nodes_arithmetic_list = []
+    nodes_memory_list = []
+    for i in range(len(network_list)):
+        if network_list[i] != 0: # if i == 0 means is the central node, we don't need to compute the score for it.
+            nodes_arithmetic_list.append(nodes_info_dict[i]["arithmetic"])
+            nodes_memory_list.append(nodes_info_dict[i]["memory"])
+    
+    res_dict = {
+        "arithmetic": nodes_arithmetic_list,
+        "memory": nodes_memory_list,
+        "bandwidth": network_list
     }
-    dsize = dsize_dict[dtype]
-    return (A_shape[0] * A_shape[1] + B_shape[0] * B_shape[1] + A_shape[0] * B_shape[1]) * dsize
 
+    return res_dict
