@@ -4,6 +4,7 @@ Overall framework
 from central_node_selection import select_central_node
 from initial_topo import create_topo
 from model_preprocessing import model_usage_memory_prediction, model_selection
+from function_modules import dict2list
 
 if __name__ == "__main__":
 
@@ -20,7 +21,7 @@ if __name__ == "__main__":
     # 4. Calculation of the distribution of tasks
 
     # 4.1. Preparation work
-    
+    nodes_info_dict = dict2list
 
     # 4.2. calculate the score for each node
 

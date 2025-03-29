@@ -4,6 +4,8 @@ some modules to use
 
 def dict2list(nodes_info_dict:dict, network_matrix:list, central_node_index:int) -> dict:
     """
+    the nodes_info_dict here is same as the format initializaed in the initial_topo.py file.
+    same with network matrix.
     convert the topo dict info to list info.
     this is a format converter, convert the initial topo format into the format we need to compute the node score.
     """
