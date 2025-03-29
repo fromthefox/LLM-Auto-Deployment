@@ -6,7 +6,7 @@ By default all information about the entire topology is known, i.e. it is straig
 # Intent parsing can even be added here to do it lol
 from Topo_class_def import Topo
 
-def create_topo(nodes_list:list) -> Topo:
+def create_topo() -> Topo:
     """
     Create the topology of the network
     """
