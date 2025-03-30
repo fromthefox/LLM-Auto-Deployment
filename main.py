@@ -15,6 +15,7 @@ if __name__ == "__main__":
     # 2. Select the model file and determine the relevant information
     model_config= model_selection("llama-3-8B")
     model_params_num = model_config["params_num"]
+    model_unsplitted_dim = model_config("unsplitted_dim")
     model_usage_memory = model_usage_memory_prediction(model_params_num, "float32")
 
     # 3. Initial centre node selection

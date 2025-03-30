@@ -23,9 +23,7 @@ def model_selection(model_name:str) -> dict:
     model_dict = {
         "llama-3-8B": {
             "params_num": 8.3e9,
-            "q_dim":128,
-            "v_dim":128,
-            "k_dim":128
+            "unsplitted_dim": 128
         }
     }
     return model_dict[model_name]
