@@ -16,11 +16,16 @@ def model_usage_memory_prediction(model_params_num:int, dtype:str) -> float:
     return model_params_num * dtype_dict[dtype] / 1024**3
     # GB
 
-def model_selection(model_name:str) -> int:
+def model_selection(model_name:str) -> dict:
     """
     this function is used to get the model params-num based on the model name.
     """
     model_dict = {
-        "llama-3-8B": 8.3e9
+        "llama-3-8B": {
+            "params_num": 8.3e9,
+            "q_dim":128,
+            "v_dim":128,
+            "k_dim":128
+        }
     }
     return model_dict[model_name]
