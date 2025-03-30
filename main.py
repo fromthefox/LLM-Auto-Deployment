@@ -31,5 +31,4 @@ if __name__ == "__main__":
     scores_list = total_score(nodes_info_dict, dynamic_weights_array)
 
     # 4.3. Determination of the proportion of mandates to be allocated
-
     
