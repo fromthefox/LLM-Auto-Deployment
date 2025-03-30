@@ -6,6 +6,7 @@ from initial_topo import create_topo
 from model_preprocessing import model_usage_memory_prediction, model_selection
 from function_modules import dict2list
 from compute_score_module import dynamic_weights, total_score
+from function_modules import proportinal_allocation
 
 if __name__ == "__main__":
 
@@ -31,4 +32,6 @@ if __name__ == "__main__":
     scores_list = total_score(nodes_info_dict, dynamic_weights_array)
 
     # 4.3. Determination of the proportion of mandates to be allocated
-    
+    allocation_list = proportinal_allocation(scores_list, model_unsplitted_dim)
+
+    # 5. Calling the distributed-llama-python interface to perform distributed inference
