@@ -10,6 +10,8 @@ def create_topo() -> Topo:
     """
     Create the topology of the network
     """
+    user_config_path = "xxxxx"
+
     network_matrix = [
         [0, 10, 20, 30, 40],
         [10, 0, 10, 20, 30],
@@ -40,6 +42,6 @@ def create_topo() -> Topo:
     Here, in actuality NETWORK can be given directly like this, since we built the topology ourselves and know the bandwidth by default;
     Arithmetic and memory need to be calculated by the previous arithmetic_evaluation_module and bandwidth_evaluation_module to get the
     """
-    topo = Topo(network_matrix, nodes_dict)
+    topo = Topo(network_matrix, nodes_dict, user_config_path)
 
     return topo

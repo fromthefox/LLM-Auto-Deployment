@@ -8,17 +8,22 @@ from model_preprocessing import model_usage_memory_prediction, model_selection
 from function_modules import dict2list
 from compute_score_module import dynamic_weights, total_score
 from function_modules import proportinal_allocation
+from Distributed_Llama_Py.model_inference_main_for_server import infenerce_main_for_server
 
 
 if __name__ == "__main__":
 
-    # 1. Get the necessary information and Create the Topo
+    # 1. Get the necessary information and Create the Topo, load the user_config
     topo_info = create_topo()
+    user_config_path = topo_info.user_config_path
 
     # 2. Select the model file and determine the relevant information
-    model_config= model_selection("llama-3-8B")
-    model_params_num = model_config["params_num"]
-    model_unsplitted_dim = model_config("unsplitted_dim")
+    model_info_dict = model_selection("llama-3-8B")
+    model_path = model_info_dict["model_path"]
+    tokenizer_path = model_info_dict["tokenizer_path"]
+    config_path = model_info_dict["config_path"]
+    model_params_num = model_info_dict["params_num"]
+    model_unsplitted_dim = model_info_dict("unsplitted_dim")
     model_usage_memory = model_usage_memory_prediction(model_params_num, "float32")
 
     # 3. Initial centre node selection

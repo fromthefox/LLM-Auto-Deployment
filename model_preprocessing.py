@@ -22,6 +22,9 @@ def model_selection(model_name:str) -> dict:
     """
     model_dict = {
         "llama-3-8B": {
+            "model_path": "xxxxx",
+            "tokenizer_path": "xxxxx",
+            "config_path": "xxxxx",
             "params_num": 8.3e9,
             "unsplitted_dim": 128
         }
