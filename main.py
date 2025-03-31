@@ -42,3 +42,12 @@ if __name__ == "__main__":
     allocation_list = proportinal_allocation(scores_list, model_unsplitted_dim)
 
     # 5. Calling the distributed-llama-python interface to perform distributed inference
+    inference_result = infenerce_main_for_server(
+        allocation_list=allocation_list,
+        model_path=model_path,
+        tokenizer_path=tokenizer_path,
+        config_path=config_path,
+        user_config_path=user_config_path
+    )
+
+    print(inference_result)
