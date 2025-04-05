@@ -2,6 +2,7 @@
 Overall framework
 """
 
+import argparse
 from central_node_selection import select_central_node
 from initial_topo import create_topo
 from model_preprocessing import model_usage_memory_prediction, model_selection
@@ -12,6 +13,13 @@ from Distributed_Llama_Py.model_inference_main_for_server import infenerce_main_
 
 
 if __name__ == "__main__":
+
+    # 0. Parse the command line arguments
+    parser = argparse.ArgumentParser(description="Distributed Llama Inference")
+    parser.add_argument('--host_index', type=int, default=None, help='host index of the current node')
+    args = parser.parse_args()
+
+    host_index = args.host_index
 
     # 1. Get the necessary information and Create the Topo, load the user_config
     topo_info = create_topo()
